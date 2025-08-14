@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import 'pages/login_page.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'supabase_config.dart';
+import 'login_page.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SupabaseConfig.init();
   runApp(const MyApp());
 }
 
@@ -11,13 +15,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       title: 'Notes App',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
         useMaterial3: true,
+        colorSchemeSeed: Colors.deepPurple,
       ),
-      home: const LoginPage(), // Start from Login Page now
+      home: const LoginPage(),
     );
   }
 }

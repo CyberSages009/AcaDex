@@ -6,11 +6,7 @@ class YearPage extends StatelessWidget {
   final String role;
   final String userId;
 
-  const YearPage({
-    super.key,
-    required this.role,
-    required this.userId,
-  });
+  const YearPage({super.key, required this.role, required this.userId});
 
   @override
   Widget build(BuildContext context) {
@@ -27,24 +23,15 @@ class YearPage extends StatelessWidget {
             index: index,
             child: Card(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
+                  borderRadius: BorderRadius.circular(12)),
               elevation: 4,
               child: ListTile(
                 title: Text(year, style: const TextStyle(fontSize: 18)),
                 trailing: const Icon(Icons.arrow_forward_ios),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    _buildPageRoute(
-                      SemesterPage(
-                        year: year,
-                        role: role,
-                        userId: userId,
-                      ),
-                    ),
-                  );
-                },
+                onTap: () => Navigator.push(
+                  context,
+                  _route(SemesterPage(year: year, role: role, userId: userId)),
+                ),
               ),
             ),
           );
@@ -53,22 +40,17 @@ class YearPage extends StatelessWidget {
     );
   }
 
-  PageRouteBuilder _buildPageRoute(Widget page) {
-    return PageRouteBuilder(
-      transitionDuration: const Duration(milliseconds: 500),
-      pageBuilder: (_, __, ___) => page,
-      transitionsBuilder: (_, animation, __, child) {
-        return FadeTransition(
-          opacity: animation,
+  Route _route(Widget page) => PageRouteBuilder(
+        transitionDuration: const Duration(milliseconds: 450),
+        pageBuilder: (_, __, ___) => page,
+        transitionsBuilder: (_, a, __, child) => FadeTransition(
+          opacity: a,
           child: SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0.2, 0),
-              end: Offset.zero,
-            ).animate(animation),
+            position:
+                Tween<Offset>(begin: const Offset(0.15, 0), end: Offset.zero)
+                    .animate(a),
             child: child,
           ),
-        );
-      },
-    );
-  }
+        ),
+      );
 }
