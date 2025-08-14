@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'semester_page.dart';
+import 'animated_tile.dart';
 
 class YearPage extends StatelessWidget {
   final String role;
@@ -16,68 +17,58 @@ class YearPage extends StatelessWidget {
     final years = ['2nd Year', '3rd Year', '4th Year'];
 
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF2193b0), Color(0xFF6dd5ed)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: ListView.builder(
-          padding: const EdgeInsets.all(16),
-          itemCount: years.length,
-          itemBuilder: (context, index) {
-            final year = years[index];
-            return GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => SemesterPage(
-                      year: year,
-                      role: role,
-                      userId: userId,
-                    ),
-                  ),
-                );
-              },
-              child: Container(
-                margin: const EdgeInsets.only(bottom: 16),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFFFFB75E), Color(0xFFED8F03)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: ListTile(
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                  title: Text(
-                    year,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  trailing:
-                      const Icon(Icons.arrow_forward_ios, color: Colors.white),
-                ),
+      appBar: AppBar(title: const Text('Select Year')),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(12),
+        itemCount: years.length,
+        itemBuilder: (context, index) {
+          final year = years[index];
+          return AnimatedTile(
+            index: index,
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
               ),
-            );
-          },
-        ),
+              elevation: 4,
+              child: ListTile(
+                title: Text(year, style: const TextStyle(fontSize: 18)),
+                trailing: const Icon(Icons.arrow_forward_ios),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    _buildPageRoute(
+                      SemesterPage(
+                        year: year,
+                        role: role,
+                        userId: userId,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          );
+        },
       ),
+    );
+  }
+
+  PageRouteBuilder _buildPageRoute(Widget page) {
+    return PageRouteBuilder(
+      transitionDuration: const Duration(milliseconds: 500),
+      pageBuilder: (_, __, ___) => page,
+      transitionsBuilder: (_, animation, __, child) {
+        return FadeTransition(
+          opacity: animation,
+          child: SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0.2, 0),
+              end: Offset.zero,
+            ).animate(animation),
+            child: child,
+          ),
+        );
+      },
     );
   }
 }
