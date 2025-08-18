@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'supabase_config.dart';
-import 'login_page.dart';
+import 'pages/login_page.dart';
 
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await SupabaseConfig.init();
+  await Supabase.initialize(
+    url: "https://oxtdhcljrssglmteftce.supabase.co",
+    anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im94dGRoY2xqcnNzZ2xtdGVmdGNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwNzQwNDEsImV4cCI6MjA3MDY1MDA0MX0.nQwRjdoGb8A5JDOseJgaeeUQVNa54uqyawaXxg-RqyA",
+  );
   runApp(const MyApp());
 }
 
@@ -15,12 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Notes App',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorSchemeSeed: Colors.deepPurple,
-      ),
       home: const LoginPage(),
     );
   }
